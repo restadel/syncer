@@ -1,3 +1,6 @@
 /node_modules
 .env
 package-lock.json
+data/inbounds.json
+data/clients.json
+.vscode
