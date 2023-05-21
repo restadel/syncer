@@ -19,8 +19,8 @@ app.get("/:token/", auth, (_, res) => {
   });
 });
 
-app.use("/:token/inbounds/", auth, updateInbounds);
-app.use("/:token/clients/", auth, updateClients);
+app.post("/:token/inbounds/", auth, updateInbounds);
+app.post("/:token/clients/", auth, updateClients);
 
 app.listen(process.env.PORT, () => {
   console.log(`started service on port ${process.env.PORT}`);

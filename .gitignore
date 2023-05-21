@@ -4,3 +4,4 @@ package-lock.json
 data/inbounds.json
 data/clients.json
 .vscode
+/config.json
