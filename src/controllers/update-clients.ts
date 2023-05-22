@@ -1,23 +1,22 @@
 import { Request, Response } from "express";
+import * as xray from "../xray";
 import * as yup from "yup";
 
 const validationSchema = yup.array(
   yup.object({
-    name: yup.string().required(),
-    email: yup.string().required(),
-    inbounds: yup.array(
-      yup.object({
-        name: yup.string().required(),
-        limit: yup.number().required().positive(),
-      })
-    ),
+    client: yup.object({
+      email: yup.string().required(),
+      id: yup.string().required().uuid(),
+      alterId: yup.number().required().positive(),
+    }),
+    inbound: yup.string().required(),
   })
 );
 
-export default function updateClients(req: Request, res: Response) {
+export default async function updateClients(req: Request, res: Response) {
   try {
-    const clients = validationSchema.validateSync(req.body, { abortEarly: false });
-    console.log(clients);
+    const records = validationSchema.validateSync(req.body, { abortEarly: false });
+    await xray.updateClients(records as { inbound: string; client: xray.Client }[]);
     res.send({
       ok: true,
       message: "clients updated",

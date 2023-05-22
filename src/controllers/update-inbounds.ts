@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import * as xray from "../xray";
 import * as yup from "yup";
 
 const validationSchema = yup.array(
@@ -8,10 +9,10 @@ const validationSchema = yup.array(
   })
 );
 
-export default function updateInbounds(req: Request, res: Response) {
+export default async function updateInbounds(req: Request, res: Response) {
   try {
     const inbounds = validationSchema.validateSync(req.body, { abortEarly: false });
-    console.log(inbounds);
+    await xray.updateInbounds(inbounds.map((item) => JSON.parse(item.configString) as xray.Inbound));
     res.send({
       ok: true,
       message: "inbounds updated",

@@ -1,13 +1,13 @@
 import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 
-interface Client {
+export interface Client {
   id: string;
   email: string;
   alterId: number;
 }
 
-interface Inbound {
+export interface Inbound {
   listen: string | null;
   port: number | null;
   protocol: string;
@@ -134,9 +134,22 @@ export async function removeClient(inbound: string, client: Client) {
   console.log("clients updated");
 }
 
+export async function updateClients(records: { client: Client; inbound: string }[]) {
+  const config = loadXrayConfig();
+  config.inbounds = config.inbounds.map((item) => {
+    item.settings.clients = records.filter((record) => record.inbound === item.tag).map((record) => record.client);
+    return item;
+  });
+  writeFileSync(process.env.XRAY_CONFIG_PATH, JSON.stringify(config));
+  await restartXray();
+  console.log("clients updated");
+}
+
 export async function getTrafficStats() {
   const dockerDemoPort = loadDockerDemoPort();
-  const { stat } = JSON.parse(execSync(`xray api statsquery --server=127.0.0.1:${dockerDemoPort} -pattern "user"`).toString()) as { stat: { name: string; value: string }[] };
+  const { stat } = JSON.parse(execSync(`xray api statsquery --server=127.0.0.1:${dockerDemoPort} -pattern "user"`).toString()) as {
+    stat: { name: string; value: string }[];
+  };
   const result = stat.map((item) => {
     item.name = item.name.replace("user>>>", "").replace(">>>traffic>>>uplink", "").replace(">>>traffic>>>downlink", "");
     return item;
