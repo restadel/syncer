@@ -145,9 +145,11 @@ export async function updateClients(records: { client: Client; inbound: string }
   console.log("clients updated");
 }
 
-export async function getTrafficStats() {
+export async function getTrafficStats(reset = false) {
   const dockerDemoPort = loadDockerDemoPort();
-  const { stat } = JSON.parse(execSync(`xray api statsquery --server=127.0.0.1:${dockerDemoPort} -pattern "user"`).toString()) as {
+  const { stat } = JSON.parse(
+    execSync(`xray api statsquery --server=127.0.0.1:${dockerDemoPort} -pattern "user"${reset ? " -reset true" : ""}`).toString()
+  ) as {
     stat: { name: string; value: string }[];
   };
   const result = stat.map((item) => {
