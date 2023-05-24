@@ -4,6 +4,7 @@ import cors from "cors";
 import auth from "./auth";
 import updateInbounds from "./controllers/update-inbounds";
 import updateClients from "./controllers/update-clients";
+import startTrafficReport from "./jobs/traffic-report";
 dotenv.config();
 
 const app = express();
@@ -26,3 +27,6 @@ app.listen(process.env.PORT, () => {
   console.log(`started service on port ${process.env.PORT}`);
   console.log(`to check your service state please open ${process.env.ADDRESS}/${process.env.SECRET_TOKEN}`);
 });
+
+// start jobs
+startTrafficReport();
