@@ -5,6 +5,7 @@ import auth from "./auth";
 import updateInbounds from "./controllers/update-inbounds";
 import updateClients from "./controllers/update-clients";
 import startTrafficReport from "./jobs/traffic-report";
+import getConfigs from "./controllers/get-config";
 dotenv.config();
 
 const app = express();
@@ -22,6 +23,7 @@ app.get("/:token/", auth, (_, res) => {
 
 app.post("/:token/inbounds/", auth, updateInbounds);
 app.post("/:token/clients/", auth, updateClients);
+app.get("/:token/config", auth, getConfigs);
 
 app.listen(process.env.PORT, () => {
   console.log(`started service on port ${process.env.PORT}`);

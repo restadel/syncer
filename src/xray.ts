@@ -71,7 +71,7 @@ export async function installLocalConfig() {
   await restartXray();
 }
 
-function loadXrayConfig() {
+export function loadXrayConfig() {
   if (!existsSync(process.env.XRAY_CONFIG_PATH)) {
     throw new Error("xray config file not found at " + process.env.XRAY_CONFIG_PATH);
   }
