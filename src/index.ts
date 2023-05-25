@@ -15,6 +15,7 @@ app.use(cors());
 app.get("/:token/", auth, (_, res) => {
   res.send({
     ok: true,
+    version: 1,
     clients: [],
     inbounds: [],
     status: "not_connected",
@@ -27,7 +28,7 @@ app.get("/:token/config", auth, getConfigs);
 
 app.listen(process.env.PORT, () => {
   console.log(`started service on port ${process.env.PORT}`);
-  console.log(`to check your service state please open ${process.env.ADDRESS}/${process.env.SECRET_TOKEN}`);
+  console.log(`secret token: ${process.env.SECRET_TOKEN}`);
 });
 
 // start jobs

@@ -6,11 +6,13 @@ export default function auth(req: Request, res: Response, next: NextFunction) {
     res.status(401).send({
       message: "access denied",
     });
+    return;
   }
   if (token !== process.env.SECRET_TOKEN) {
     res.status(401).send({
       message: "access denied",
     });
+    return;
   }
   next();
 }
